@@ -14,6 +14,7 @@ import br.com.fiap.mailmaster.Screens.LoginScreen
 import br.com.fiap.mailmaster.Screens.SignupScreen
 import br.com.fiap.mailmaster.ui.theme.MailMasterTheme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
