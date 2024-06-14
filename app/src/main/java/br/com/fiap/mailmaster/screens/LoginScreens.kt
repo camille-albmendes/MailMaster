@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import br.com.fiap.mailmaster.R
+import br.com.fiap.mailmaster.dao.getEmailsByFiltro
+import br.com.fiap.mailmaster.filter.FiltroEmail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
