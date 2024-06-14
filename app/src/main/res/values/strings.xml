@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MailMaster</string>
+    <string name="slogan">organizing what matters</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="no_account">Dont have an account?</string>
+    <string name="sign_upH">Sign up here</string>
+    <string name="sign_up">Sign up</string>
+    <string name="login">Login</string>
 </resources>
