@@ -125,7 +125,7 @@ fun LoginScreen(navController: NavHostController) {
                 color = colorResource(id = R.color.black),
                 modifier = Modifier
                     .padding(start = 5.dp)
-                    .clickable { navController.navigate("signupH") }
+                    .clickable { navController.navigate("signup") }
             )
         }
 

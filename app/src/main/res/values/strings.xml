@@ -7,4 +7,8 @@
     <string name="sign_upH">Sign up here</string>
     <string name="sign_up">Sign up</string>
     <string name="login">Login</string>
+    <string name="name">Name</string>
+    <string name="date_of_birth">Date Of Birth</string>
+    <string name="cemail">Confirm your e-mail</string>
+    <string name="cpassword">Confirm you password</string>
 </resources>
