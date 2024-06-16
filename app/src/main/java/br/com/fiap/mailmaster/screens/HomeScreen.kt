@@ -33,36 +33,47 @@ fun HomeScreen() {
 
 @Composable
 fun TopBar() {
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(20.dp))
             .background(Color(0xFF8B0000))
             .padding(8.dp)
-            .clip(RoundedCornerShape(20.dp)), // Arredondando os cantos com 20dp de curva
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "M",
-            fontWeight = FontWeight.Bold,
-            fontSize = 24.sp,
-            color = Color.White
-        )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = Icons.Default.Settings,
-                contentDescription = "Settings",
-                tint = Color.White,
-                modifier = Modifier.padding(end = 8.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "M",
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                color = Color.White,
+                modifier = Modifier.weight(1f)
             )
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = "User",
-                tint = Color.White
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Settings",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = "User",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
     }
 }
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
