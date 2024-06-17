@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -183,6 +185,7 @@ fun MailList() {
             MailItem(
                 sender = "Sender $index",
                 time = "20:30",
+                title = "Title $index",
                 message = "Sample message $index",
                 isFavorite = index % 2 == 0,
                 isSaved = index % 3 == 0
@@ -195,6 +198,7 @@ fun MailList() {
 fun MailItem(
     sender: String,
     time: String,
+    title: String,
     message: String,
     isFavorite: Boolean,
     isSaved: Boolean
@@ -212,30 +216,48 @@ fun MailItem(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(8.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = sender,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)
                 )
-                Text(
-                    text = message,
-                    fontSize = 14.sp,
-                    color = Color.DarkGray,
-                    modifier = Modifier.weight(2f)
-                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Row aninhada para o título e o sample message
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(2f) // Peso maior para ocupar mais espaço horizontal
+                ) {
+                    Column {
+                        Text(
+                            text = title,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+                        Text(
+                            text = message,
+                            fontSize = 14.sp,
+                            color = Color.DarkGray
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
 
                 // Coluna para os ícones
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.End,
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(0.5f)
                 ) {
                     IconButton(
                         onClick = { favorite = !favorite },
@@ -261,7 +283,6 @@ fun MailItem(
                 }
             }
 
-            // Novo Row para o texto do tempo
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -283,4 +304,3 @@ fun MailItem(
 fun DefaultPreview() {
     HomeScreen()
 }
-
