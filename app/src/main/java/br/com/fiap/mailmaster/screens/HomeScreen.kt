@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -251,79 +253,90 @@ fun MailItem(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = sender,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)
                 )
-                Text(
-                    text = message,
-                    fontSize = 14.sp,
-                    color = Color.DarkGray,
-                    modifier = Modifier.weight(2f) // Tamanho ajustável para a mensagem
-                )
-                IconButton(
-                    onClick = { favorite = !favorite },
-                    colors = IconButtonDefaults.iconButtonColors(contentColor = if (favorite) Color(0xFF8B0000) else Color.Gray) // Cor do ícone
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(2f)
                 ) {
-                    Icon(
-                        imageVector = if (favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "Favorite"
-                    )
-                }
-                IconButton(
-                    onClick = { saved = !saved },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = if (saved) Color(0xFF8B0000) else Color.Gray // Cor do ícone
-                    )
-                ) {
-                    if (saved) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.iconhiglighter),
-                            contentDescription = "Favorite",
-                            modifier = Modifier.size(24.dp) // Adjust the size as needed
+                    Column {
+                        //   Text(
+                        //   text = title,
+                        //    fontWeight = FontWeight.Bold,
+                        //   modifier = Modifier.padding(bottom = 4.dp)
+                        //   )
+                        Text(
+                            text = message,
+                            fontSize = 14.sp,
+                            color = Color.DarkGray
                         )
-                    } else {
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End,
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(0.5f)
+                ) {
+                    IconButton(
+                        onClick = { favorite = !favorite },
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = if (favorite) Color(0xFF8B0000) else Color.Gray)
+                    ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.iconhiglighterfill),
-                            contentDescription = "Favorite",
-                            modifier = Modifier.size(24.dp) // Adjust the size as needed
+                            imageVector = if (favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = "Favorite"
+                        )
+                    }
+                    IconButton(
+                        onClick = { saved = !saved },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = if (saved) Color(0xFF8B0000) else Color.Gray
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(id = if (saved) R.drawable.iconhiglighterfill else R.drawable.iconhiglighter),
+                            contentDescription = "Save",
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }
             }
 
-
-        }
-
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp)
-        ) {
-            Text(
-                text = time,
-                fontSize = 12.sp,
-                color = Color.Gray,
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(end = 16.dp)
-                    .align(Alignment.End)
-            )}
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(
+                    text = time,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+            }
+        }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
