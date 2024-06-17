@@ -11,4 +11,5 @@
     <string name="date_of_birth">Date Of Birth</string>
     <string name="cemail">Confirm your e-mail</string>
     <string name="cpassword">Confirm you password</string>
+    <string name="returnsc">Return</string>
 </resources>
