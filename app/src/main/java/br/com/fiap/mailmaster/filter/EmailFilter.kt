@@ -42,10 +42,10 @@ class FiltroEmail {
 
         if(
             (this.id != null && this.id != email.id) ||
-            (this.favorito == true && !email.favorito) ||
-            (this.verDepois == true && !email.verDepois) ||
-            (!this.categorias.isNullOrEmpty() && !this.categorias!!.all { categoriaEmail -> email.categorias.contains(categoriaEmail) }) ||
-            (!this.busca.isNullOrEmpty() && !email.assunto.lowercase().contains(this.busca!!.lowercase()))
+            (this.favorito == true && !email.favorito!!) ||
+            (this.verDepois == true && !email.verDepois!!) ||
+            (!this.categorias.isNullOrEmpty() && !this.categorias!!.all { categoriaEmail -> !email.categorias.isNullOrEmpty() && email.categorias!!.contains(categoriaEmail) }) ||
+            (!this.busca.isNullOrEmpty() && !email.assunto.isNullOrEmpty() && !email.assunto!!.lowercase().contains(this.busca!!.lowercase()))
         ) {
             match = false
         }

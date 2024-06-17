@@ -38,6 +38,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,7 +56,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.mailmaster.LoginActivity
 import br.com.fiap.mailmaster.R
+import br.com.fiap.mailmaster.model.Email
 import br.com.fiap.mailmaster.security.FirebaseUtils
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 @Composable
 fun HomeScreen() {
@@ -180,16 +187,48 @@ fun FilterButton(text: String, icon: ImageVector) {
 
 @Composable
 fun MailList() {
-    LazyColumn {
-        items(10) { index ->
-            MailItem(
-                sender = "Sender $index",
-                time = "20:30",
-                message = "Sample message $index",
-                isFavorite = index % 2 == 0,
-                isSaved = index % 3 == 0
-            )
+    var emails = remember { mutableStateListOf<Email>()}
+    var emailsFetched by remember { mutableStateOf(false) }
+
+    val firebaseAuth = FirebaseAuth.getInstance()
+    val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+    val ref = firebaseDatabase.getReference()
+
+    val emailsListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            emails.clear()
+            dataSnapshot.children.forEach() { emails.add(it.getValue(Email::class.java)!!) }
         }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+            println("loadPost:onCancelled ${databaseError.toException()}")
+        }
+    }
+
+    if(!emailsFetched) {
+        ref
+            .child("usuarios")
+            .child(firebaseAuth.currentUser!!.uid)
+            .child("emails")
+            .addListenerForSingleValueEvent(emailsListener)
+
+        emailsFetched = true
+    }
+
+    if(emails.size > 0) {
+        LazyColumn {
+            items(emails.size) { index ->
+                MailItem(
+                    sender = emails[index].remetente!!.nome,
+                    time = emails[index].data.toString(),
+                    message = emails[index].assunto!!,
+                    isFavorite = emails[index].favorito == true,
+                    isSaved = emails[index].verDepois == true
+                )
+            }
+        }
+    } else {
+        Text(text = "Carregando...")
     }
 }
 
