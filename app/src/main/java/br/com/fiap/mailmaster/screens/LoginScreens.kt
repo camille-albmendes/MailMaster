@@ -1,5 +1,7 @@
 package br.com.fiap.mailmaster.screens
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,7 +37,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import br.com.fiap.mailmaster.MainActivity
 import br.com.fiap.mailmaster.R
+import br.com.fiap.mailmaster.security.FirebaseUtils
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,6 +48,8 @@ fun LoginScreen(navController: NavHostController) {
 
     var email by remember () { mutableStateOf("") }
     var password by remember () { mutableStateOf("") }
+
+    val ctx = LocalContext.current
 
     Column (modifier = Modifier
         .background(color = colorResource(id =R.color.m_red)))
@@ -97,17 +103,8 @@ fun LoginScreen(navController: NavHostController) {
         Row( modifier = Modifier
             .padding(top = 20.dp))
         {
-            Button(onClick = { /*TODO*/ },
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.black)))
-            {
-                Text(text = "?", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = colorResource(
-                    id = R.color.white
-                ))
-            }
-
             Button(onClick = {
-                // TODO login
+                login(ctx, email, password)
             },
                 modifier = Modifier
                     .padding(start = 10.dp),
@@ -132,5 +129,24 @@ fun LoginScreen(navController: NavHostController) {
     }
     }
     }
+    }
+}
+
+fun login(ctx: Context, email: String, senha: String) {
+    val signInEmail = email.trim()
+    val signInPassword = senha.trim()
+
+    // TODO validação
+    if (true) {
+        FirebaseUtils.firebaseAuth.signInWithEmailAndPassword(signInEmail, signInPassword)
+            .addOnCompleteListener { signIn ->
+                if (signIn.isSuccessful) {
+                    ctx.startActivity(Intent(ctx, MainActivity::class.java))
+                } else {
+                    // TODO mostrar erro de login para o usuário
+                }
+            }
+    } else {
+        // TODO mostrar erros de validação
     }
 }
