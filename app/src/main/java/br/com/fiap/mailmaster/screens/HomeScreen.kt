@@ -59,10 +59,11 @@ import br.com.fiap.mailmaster.security.FirebaseUtils
 
 @Composable
 fun HomeScreen() {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color.White)
-        .padding(15.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+            .padding(15.dp)
     ) {
         TopBar()
         SearchBar()
@@ -88,7 +89,6 @@ fun TopBar() {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-
             Image(
                 painter = painterResource(id = R.drawable.logomarca),
                 contentDescription = "",
@@ -114,8 +114,6 @@ fun TopBar() {
     }
 }
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar() {
@@ -131,13 +129,13 @@ fun SearchBar() {
             placeholder = { Text("Search") },
             trailingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White, // Cor de fundo branca
+                containerColor = Color.White,
                 focusedIndicatorColor = Color.Gray,
                 unfocusedIndicatorColor = Color.Gray
             ),
             modifier = Modifier
                 .weight(1f)
-                .height(40.dp) // Altura da barra de busca
+                .height(40.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
         )
@@ -146,8 +144,8 @@ fun SearchBar() {
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B0000)),
             modifier = Modifier
                 .padding(start = 8.dp)
-                .height(40.dp) // Altura do botão
-                .defaultMinSize(minWidth = 120.dp) // Largura mínima do botão
+                .height(40.dp)
+                .defaultMinSize(minWidth = 120.dp)
         ) {
             Text("New Mail", color = Color.White)
         }
@@ -212,10 +210,10 @@ fun MailItem(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -230,64 +228,59 @@ fun MailItem(
                     text = message,
                     fontSize = 14.sp,
                     color = Color.DarkGray,
-                    modifier = Modifier.weight(2f) // Tamanho ajustável para a mensagem
+                    modifier = Modifier.weight(2f)
                 )
-                IconButton(
-                    onClick = { favorite = !favorite },
-                    colors = IconButtonDefaults.iconButtonColors(contentColor = if (favorite) Color(0xFF8B0000) else Color.Gray) // Cor do ícone
+
+                // Coluna para os ícones
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End,
+                    modifier = Modifier.padding(start = 8.dp)
                 ) {
-                    Icon(
-                        imageVector = if (favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "Favorite"
-                    )
-                }
-                IconButton(
-                    onClick = { saved = !saved },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = if (saved) Color(0xFF8B0000) else Color.Gray // Cor do ícone
-                    )
-                ) {
-                    if (saved) {
+                    IconButton(
+                        onClick = { favorite = !favorite },
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = if (favorite) Color(0xFF8B0000) else Color.Gray)
+                    ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.iconhiglighter),
-                            contentDescription = "Favorite",
-                            modifier = Modifier.size(24.dp) // Adjust the size as needed
+                            imageVector = if (favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = "Favorite"
                         )
-                    } else {
+                    }
+                    IconButton(
+                        onClick = { saved = !saved },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = if (saved) Color(0xFF8B0000) else Color.Gray
+                        )
+                    ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.iconhiglighterfill),
-                            contentDescription = "Favorite",
-                            modifier = Modifier.size(24.dp) // Adjust the size as needed
+                            painter = painterResource(id = if (saved) R.drawable.iconhiglighterfill else R.drawable.iconhiglighter),
+                            contentDescription = "Save",
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }
             }
 
-
-        }
-
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp)
-        ) {
-            Text(
-                text = time,
-                fontSize = 12.sp,
-                color = Color.Gray,
+            // Novo Row para o texto do tempo
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(end = 16.dp)
-                    .align(Alignment.End)
-            )}
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(
+                    text = time,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+            }
+        }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     HomeScreen()
 }
+
