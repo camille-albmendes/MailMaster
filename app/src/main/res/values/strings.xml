@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">MailMaster</string>
-    <string name="slogan">organizing what matters</string>
+    <string name="slogan">Organizando o que importa</string>
     <string name="email">E-mail</string>
-    <string name="password">Password</string>
-    <string name="no_account">Dont have an account?</string>
-    <string name="sign_upH">Sign up here</string>
-    <string name="sign_up">Sign up</string>
+    <string name="password">Senha</string>
+    <string name="no_account">Não possui uma conta?</string>
+    <string name="sign_upH">Cadastre-se aqui</string>
+    <string name="sign_up">Cadastre-se</string>
     <string name="login">Login</string>
-    <string name="name">Name</string>
-    <string name="date_of_birth">Date Of Birth</string>
-    <string name="cemail">Confirm your e-mail</string>
-    <string name="cpassword">Confirm you password</string>
-    <string name="returnsc">Return</string>
+    <string name="name">Nome</string>
+    <string name="date_of_birth">Data de nascimento</string>
+    <string name="cemail">Confirme seu e-mail</string>
+    <string name="cpassword">Confirme sua senha</string>
+    <string name="returnsc">Retornar</string>
 </resources>

@@ -1,12 +1,10 @@
 package br.com.fiap.mailmaster.filter
 
-import androidx.compose.ui.text.toLowerCase
 import br.com.fiap.mailmaster.model.CategoriaEmail
 import br.com.fiap.mailmaster.model.Email
-import java.util.Locale
 
 class FiltroEmail {
-    var id: Long? = null
+    var id: String? = null
     var categorias: List<CategoriaEmail>? = null
     var favorito: Boolean? = null
     var verDepois: Boolean? = null
@@ -14,7 +12,7 @@ class FiltroEmail {
 
     constructor() {}
 
-    constructor(id: Long?) {
+    constructor(id: String?) {
         this.id = id
     }
 
@@ -27,7 +25,8 @@ class FiltroEmail {
         this.verDepois = verDepois
     }
 
-    constructor(busca: String?) {
+    constructor(id: String?, busca: String?) {
+        this.id = id
         this.busca = busca
     }
 

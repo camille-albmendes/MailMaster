@@ -10,7 +10,7 @@ fun getEmailsByFiltro(filtro: FiltroEmail): List<Email> {
     }
 }
 
-fun getEmailById(id: Long): Email? {
+fun getEmailById(id: String): Email? {
     val filtroComId = FiltroEmail(id)
     return todosOsEmails.find { email ->
         filtroComId.matchEmail(email)
