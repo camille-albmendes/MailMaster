@@ -34,8 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.mailmaster.MainActivity
 import br.com.fiap.mailmaster.R
-import br.com.fiap.mailmaster.security.FirebaseUtils
-import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -151,7 +149,7 @@ fun SignupScreen() {
             .padding(top = 20.dp))
         {
 
-            Button(onClick = { cadastrarUsuario(ctx, email, password) },
+            Button(onClick = { cadastrarUsuario(ctx, name, email, password) },
                 modifier = Modifier
                     .padding(start = 10.dp),
                 shape = RoundedCornerShape(10.dp),
@@ -175,27 +173,9 @@ fun validarCampo(campo: String, valor: String): String {
     return ""
 }
 
-fun cadastrarUsuario(ctx: Context, email: String, senha: String) {
-    val firebaseAuth = FirebaseAuth.getInstance()
-    firebaseAuth.createUserWithEmailAndPassword(email, senha)
-        .addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                println("Conta criada com sucesso!")
-                sendEmailVerificacao()
-                ctx.startActivity(Intent(ctx, MainActivity::class.java))
-            } else {
-                println("failed to Authenticate !")
-            }
+fun cadastrarUsuario(ctx: Context, nome: String, email: String, senha: String) {
+    br.com.fiap.mailmaster.repository.cadastrarUsuario(nome, email, senha)
+        .addOnCompleteListener {
+            ctx.startActivity(Intent(ctx, MainActivity::class.java))
         }
-}
-
-fun sendEmailVerificacao() {
-    FirebaseUtils.firebaseUser?.let {
-        it.sendEmailVerification().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // TODO mostrar para o usuário
-                println("E-mail de confirmação enviado")
-            }
-        }
-    }
 }
