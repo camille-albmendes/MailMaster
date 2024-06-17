@@ -230,10 +230,10 @@ fun MailItem(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-
+                // Row aninhada para o título e o sample message
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.weight(2f)
+                    modifier = Modifier.weight(2f) // Peso maior para ocupar mais espaço horizontal
                 ) {
                     Column {
                         Text(
@@ -251,7 +251,7 @@ fun MailItem(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-
+                // Coluna para os ícones
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.End,
@@ -304,3 +304,4 @@ fun MailItem(
 fun DefaultPreview() {
     HomeScreen()
 }
+
