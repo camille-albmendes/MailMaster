@@ -140,13 +140,13 @@ fun SearchBar() {
             placeholder = { Text("Search") },
             trailingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White, // Cor de fundo branca
+                containerColor = Color.White,
                 focusedIndicatorColor = Color.Gray,
                 unfocusedIndicatorColor = Color.Gray
             ),
             modifier = Modifier
                 .weight(1f)
-                .height(40.dp) // Altura da barra de busca
+                .height(40.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
         )
@@ -155,8 +155,8 @@ fun SearchBar() {
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B0000)),
             modifier = Modifier
                 .padding(start = 8.dp)
-                .height(40.dp) // Altura do botão
-                .defaultMinSize(minWidth = 120.dp) // Largura mínima do botão
+                .height(40.dp)
+                .defaultMinSize(minWidth = 120.dp)
         ) {
             Text("New Mail", color = Color.White)
         }
