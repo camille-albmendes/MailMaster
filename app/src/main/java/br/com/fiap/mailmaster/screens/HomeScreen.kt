@@ -57,8 +57,9 @@ import br.com.fiap.mailmaster.R
 
 @Composable
 fun HomeScreen() {
-    Column(modifier = Modifier.fillMaxSize()
-    .background(color = Color.White)
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color.White)
         .padding(15.dp)
     ) {
         TopBar()
@@ -210,6 +211,7 @@ fun MailItem(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
+
         Column(modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
@@ -240,22 +242,48 @@ fun MailItem(
                 }
                 IconButton(
                     onClick = { saved = !saved },
-                    colors = IconButtonDefaults.iconButtonColors(contentColor = if (saved) Color(0xFF8B0000) else Color.Gray) // Cor do ícone
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = if (saved) Color(0xFF8B0000) else Color.Gray // Cor do ícone
+                    )
                 ) {
-
+                    if (saved) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.iconhiglighter),
+                            contentDescription = "Favorite",
+                            modifier = Modifier.size(24.dp) // Adjust the size as needed
+                        )
+                    } else {
+                        Icon(
+                            painter = painterResource(id = R.drawable.iconhiglighterfill),
+                            contentDescription = "Favorite",
+                            modifier = Modifier.size(24.dp) // Adjust the size as needed
+                        )
+                    }
                 }
             }
+
+
+        }
+
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp)
+        ) {
             Text(
                 text = time,
                 fontSize = 12.sp,
                 color = Color.Gray,
                 modifier = Modifier
+                    .fillMaxSize()
+                    .padding(end = 16.dp)
                     .align(Alignment.End)
-                    .padding(top = 4.dp) // Espaçamento entre a mensagem e o horário
-            )
-        }
+            )}
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
