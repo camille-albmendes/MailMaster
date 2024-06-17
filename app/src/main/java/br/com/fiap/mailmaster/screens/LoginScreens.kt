@@ -1,4 +1,4 @@
-package br.com.fiap.mailmaster.Screens
+package br.com.fiap.mailmaster.screens
 
 
 import androidx.compose.foundation.Image
@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import br.com.fiap.mailmaster.R
+import br.com.fiap.mailmaster.dao.getEmailsByFiltro
+import br.com.fiap.mailmaster.filter.FiltroEmail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -125,7 +127,7 @@ fun LoginScreen(navController: NavHostController) {
                 color = colorResource(id = R.color.black),
                 modifier = Modifier
                     .padding(start = 5.dp)
-                    .clickable { navController.navigate("signupH") }
+                    .clickable { navController.navigate("read") }
             )
         }
 
