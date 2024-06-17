@@ -1,4 +1,4 @@
-package br.com.fiap.mailmaster.Screens
+package br.com.fiap.mailmaster.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

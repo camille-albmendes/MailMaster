@@ -1,4 +1,4 @@
-package br.com.fiap.mailmaster.Screens
+package br.com.fiap.mailmaster.screens
 
 
 import androidx.compose.foundation.Image
@@ -125,7 +125,7 @@ fun LoginScreen(navController: NavHostController) {
                 color = colorResource(id = R.color.black),
                 modifier = Modifier
                     .padding(start = 5.dp)
-                    .clickable { navController.navigate("signup") }
+                    .clickable { navController.navigate("read") }
             )
         }
 
