@@ -10,8 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.fiap.mailmaster.Screens.LoginScreen
-import br.com.fiap.mailmaster.Screens.SignupScreen
+import br.com.fiap.mailmaster.screens.LoginScreen
+import br.com.fiap.mailmaster.screens.SignupScreen
+import br.com.fiap.mailmaster.screens.HomeScreen
+import br.com.fiap.mailmaster.screens.ReadScreen
 import br.com.fiap.mailmaster.ui.theme.MailMasterTheme
 
 
@@ -27,9 +29,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "login" ){
+                    NavHost(navController = navController, startDestination = "read" ){
                         composable(route = "login") { LoginScreen(navController)}
                         composable(route = "signup") { SignupScreen() }
+                        composable(route = "home") { HomeScreen() }
+                        composable(route = "read") { ReadScreen() }
                     }
                 }
             }
