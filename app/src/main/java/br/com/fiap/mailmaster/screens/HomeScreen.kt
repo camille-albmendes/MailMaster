@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Favorite
@@ -42,6 +41,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,16 +56,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.mailmaster.LoginActivity
 import br.com.fiap.mailmaster.R
+import br.com.fiap.mailmaster.filter.FiltroEmail
 import br.com.fiap.mailmaster.model.Email
+import br.com.fiap.mailmaster.repository.buscarEmails
+import br.com.fiap.mailmaster.repository.filtrarEmails
 import br.com.fiap.mailmaster.security.FirebaseUtils
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
 @Composable
 fun HomeScreen() {
+    var emailsFetched by remember { mutableStateOf(false) }
+    var emails = remember { mutableStateListOf<Email>()}
+
+    if(!emailsFetched) {
+        buscarEmails()
+            .addOnSuccessListener {
+                emails.clear()
+                it.children.forEach() { email ->  emails.add(email.getValue(Email::class.java)!!) }
+                emailsFetched = true
+            }
+    }
+
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = Color.White)
@@ -73,8 +83,8 @@ fun HomeScreen() {
     ) {
         TopBar()
         SearchBar()
-        FilterBar()
-        MailList()
+        FilterBar(emails)
+        MailList(emails, emailsFetched)
     }
 }
 
@@ -162,7 +172,7 @@ fun SearchBar() {
 }
 
 @Composable
-fun FilterBar() {
+fun FilterBar(emails: SnapshotStateList<Email>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -170,52 +180,38 @@ fun FilterBar() {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        FilterButton("All", Icons.Default.Email)
-        FilterButton("Markers", Icons.Default.Star)
-        FilterButton("Favorites", Icons.Default.Favorite)
-        FilterButton("Calendar", Icons.Default.DateRange)
+        FilterButton("Tudo", Icons.Default.Email, emails, FiltroEmail())
+        FilterButton("Ver depois", Icons.Default.Star, emails, FiltroEmail(false, true))
+        FilterButton("Favoritos", Icons.Default.Favorite, emails, FiltroEmail(true, false))
     }
 }
 
 @Composable
-fun FilterButton(text: String, icon: ImageVector) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+fun FilterButton(text: String, icon: ImageVector, emails: SnapshotStateList<Email>, filtroEmail: FiltroEmail) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.clickable {
+            buscarEmails()
+                .addOnSuccessListener {
+                    emails.clear()
+                    filtrarEmails(
+                        it.children.map() { email ->  email.getValue(Email::class.java)!! },
+                        filtroEmail
+                    )
+                        .forEach{ email ->  emails.add(email) }
+                }
+        }
+    ) {
         Icon(icon, contentDescription = text, modifier = Modifier.padding(end = 4.dp), tint = Color.Black)
         Text(text, fontWeight = FontWeight.Bold, color = Color.Black, fontSize = 12.sp)
     }
 }
 
 @Composable
-fun MailList() {
-    var emails = remember { mutableStateListOf<Email>()}
-    var emailsFetched by remember { mutableStateOf(false) }
-
-    val firebaseAuth = FirebaseAuth.getInstance()
-    val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
-    val ref = firebaseDatabase.getReference()
-
-    val emailsListener = object : ValueEventListener {
-        override fun onDataChange(dataSnapshot: DataSnapshot) {
-            emails.clear()
-            dataSnapshot.children.forEach() { emails.add(it.getValue(Email::class.java)!!) }
-        }
-
-        override fun onCancelled(databaseError: DatabaseError) {
-            println("loadPost:onCancelled ${databaseError.toException()}")
-        }
-    }
-
+fun MailList(emails: SnapshotStateList<Email>, emailsFetched: Boolean) {
     if(!emailsFetched) {
-        ref
-            .child("usuarios")
-            .child(firebaseAuth.currentUser!!.uid)
-            .child("emails")
-            .addListenerForSingleValueEvent(emailsListener)
-
-        emailsFetched = true
-    }
-
-    if(emails.size > 0) {
+        Text(text = "Carregando...")
+    } else if(emails.size > 0) {
         LazyColumn {
             items(emails.size) { index ->
                 MailItem(
@@ -228,7 +224,7 @@ fun MailList() {
             }
         }
     } else {
-        Text(text = "Carregando...")
+        Text(text = "Não há e-mails por aqui...")
     }
 }
 
