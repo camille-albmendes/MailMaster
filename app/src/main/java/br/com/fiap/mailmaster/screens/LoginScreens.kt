@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -87,6 +88,7 @@ fun LoginScreen(navController: NavHostController) {
                                 .padding(horizontal = 40.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
                             shape = RoundedCornerShape(10.dp),
+                            textStyle = TextStyle(color = Color.Black),
                             leadingIcon = { Icon(imageVector = Icons.Filled.Email, contentDescription = "") },
                             label = { Text(text = stringResource(id = R.string.email), color = Color.Black) }
                         )
@@ -99,6 +101,7 @@ fun LoginScreen(navController: NavHostController) {
                                 .padding(horizontal = 40.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
                             shape = RoundedCornerShape(10.dp),
+                            textStyle = TextStyle(color = Color.Black),
                             leadingIcon = { Icon(imageVector = Icons.Filled.Lock, contentDescription = "") },
                             label = { Text(text = stringResource(id = R.string.password), color = Color.Black) }
                         )

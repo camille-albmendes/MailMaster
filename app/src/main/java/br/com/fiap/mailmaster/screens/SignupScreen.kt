@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.text.input.KeyboardType
@@ -109,11 +110,14 @@ fun SignupScreen() {
                             modifier = Modifier
                                 .padding(top = 20.dp)
                                 .padding(horizontal = 40.dp),
-
-                            colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                containerColor = Color.White
+                            ),
                             shape = RoundedCornerShape(10.dp),
+                            textStyle = TextStyle(color = Color.Black),
                             label = { Text(text = stringResource(id = R.string.name), color = Color.Black) }
                         )
+
 
                         OutlinedTextField(
                             value = dateofbirth,
@@ -136,6 +140,7 @@ fun SignupScreen() {
 
                             colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
                             shape = RoundedCornerShape(10.dp),
+                            textStyle = TextStyle(color = Color.Black),
                             label = { Text(text = stringResource(id = R.string.date_of_birth), color = Color.Black) }
                         )
 
@@ -159,6 +164,7 @@ fun SignupScreen() {
                                 .padding(horizontal = 40.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
                             shape = RoundedCornerShape(10.dp),
+                            textStyle = TextStyle(color = Color.Black),
                             label = { Text(text = stringResource(id = R.string.email), color = Color.Black) }
                         )
 
@@ -182,6 +188,7 @@ fun SignupScreen() {
                                 .padding(horizontal = 40.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
                             shape = RoundedCornerShape(10.dp),
+                            textStyle = TextStyle(color = Color.Black),
                             label = { Text(text = stringResource(id = R.string.cemail), color = Color.Black) }
                         )
 
@@ -205,6 +212,7 @@ fun SignupScreen() {
                                 .padding(horizontal = 40.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
                             shape = RoundedCornerShape(10.dp),
+                            textStyle = TextStyle(color = Color.Black),
                             label = { Text(text = stringResource(id = R.string.password), color = Color.Black) }
                         )
 
@@ -228,6 +236,7 @@ fun SignupScreen() {
                                 .padding(horizontal = 40.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
                             shape = RoundedCornerShape(10.dp),
+                            textStyle = TextStyle(color = Color.Black),
                             label = { Text(text = stringResource(id = R.string.cpassword), color = Color.Black) }
                         )
                     }
