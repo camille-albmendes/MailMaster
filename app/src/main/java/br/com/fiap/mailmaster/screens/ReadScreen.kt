@@ -25,16 +25,16 @@ import androidx.compose.ui.unit.sp
 import br.com.fiap.mailmaster.R
 
 @Composable
-fun ReadScreen() {
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color.White)
-        .padding(15.dp)
+fun ReadScreen(emailId: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+            .padding(15.dp)
     ) {
-       TopBar()
+
         Return()
-        MessageField()
+        MessageField(emailId)
     }
 }
 
@@ -57,8 +57,7 @@ fun Return() {
 }
 
 @Composable
-fun MessageField() {
-
+fun MessageField(emailId: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -66,19 +65,17 @@ fun MessageField() {
             .shadow(8.dp, RoundedCornerShape(8.dp)),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-
             Text(
-                text = "20:30",
+                text = "20:30", // Exemplo de hora do email
                 fontSize = 11.sp,
                 color = Color.Gray
             )
 
             Text(
-                text = "Nubank",
+                text = "Remetente: $emailId", // Utiliza o emailId para exibir o remetente
                 fontSize = 18.sp,
                 color = Color.Black
             )
@@ -86,7 +83,7 @@ fun MessageField() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Entenda suas Finanças",
+                text = "Assunto do Email", // Aqui você pode adicionar o assunto real do email
                 fontSize = 16.sp,
                 color = Color.Black
             )
@@ -94,13 +91,12 @@ fun MessageField() {
             Spacer(modifier = Modifier.height(15.dp))
 
             Text(
-                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sapien lorem, pretium quis ipsum sit amet, aliquet placerat dui. Fusce sagittis venenatis urna, eget lacinia dolor accumsan nec. Sed molestie mi velit, eget elementum est accumsan at. Cras dictum ante sed sapien imperdiet convallis. Nunc nulla risus, interdum in tempus vel, sodales ut nibh. In sit amet purus eget ipsum malesuada viverra vitae in felis. Sed hendrerit sollicitudin libero, quis auctor diam condimentum eget. In hac habitasse platea dictumst. Sed vel posuere mi, id cursus libero. Mauris nec leo nec lorem mattis maximus. Fusce ligula erat, bibendum non euismod id, volutpat at libero. Nulla viverra sollicitudin nunc, eu ultricies nisi aliquet id. Nam porttitor ullamcorper risus a tempor. Cras a purus vel mauris ultricies gravida eu eu dui. Suspendisse non finibus dolor, ac consequat nibh. Morbi convallis, nunc luctus aliquam finibus, mauris nunc volutpat magna, sit amet ultrices quam mauris eu libero.",
+                text = "Conteúdo do Email", // Aqui você pode adicionar o conteúdo real do email
                 fontSize = 15.sp,
                 color = Color.Black
             )
         }
     }
-
-
 }
+
 
