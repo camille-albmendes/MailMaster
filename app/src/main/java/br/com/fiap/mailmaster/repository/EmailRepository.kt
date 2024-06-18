@@ -1,7 +1,11 @@
 package br.com.fiap.mailmaster.repository
 
+import br.com.fiap.mailmaster.filter.FiltroEmail
 import br.com.fiap.mailmaster.model.Email
 import br.com.fiap.mailmaster.model.RemetenteGenerico
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 
 private val remetenteEmailBoasVindas = RemetenteGenerico("MailMaster", "time@mailmaster.com.br")
@@ -62,4 +66,20 @@ fun criarEmailsMock(usuarioId: String) {
             .child(it.id!!)
             .setValue(it)
     }
+}
+
+fun buscarEmails(): Task<DataSnapshot> {
+    val firebaseAuth = FirebaseAuth.getInstance()
+    val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+    val ref = firebaseDatabase.getReference()
+
+    return ref
+        .child("usuarios")
+        .child(firebaseAuth.currentUser!!.uid)
+        .child("emails")
+        .get()
+}
+
+fun filtrarEmails(emails: Collection<Email>, filtroEmail: FiltroEmail): List<Email> {
+    return emails.filter { email -> filtroEmail.matchEmail(email) }
 }
