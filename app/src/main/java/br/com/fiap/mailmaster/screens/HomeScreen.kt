@@ -180,9 +180,9 @@ fun FilterBar(emails: SnapshotStateList<Email>) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        FilterButton("All", Icons.Default.Email, emails, FiltroEmail())
-        FilterButton("Markers", Icons.Default.Star, emails, FiltroEmail(false, true))
-        FilterButton("Favorites", Icons.Default.Favorite, emails, FiltroEmail(true, false))
+        FilterButton("Tudo", Icons.Default.Email, emails, FiltroEmail())
+        FilterButton("Ver depois", Icons.Default.Star, emails, FiltroEmail(false, true))
+        FilterButton("Favoritos", Icons.Default.Favorite, emails, FiltroEmail(true, false))
     }
 }
 
