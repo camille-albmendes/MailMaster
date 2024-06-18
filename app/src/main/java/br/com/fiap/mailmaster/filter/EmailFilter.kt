@@ -1,12 +1,10 @@
 package br.com.fiap.mailmaster.filter
 
-import androidx.compose.ui.text.toLowerCase
 import br.com.fiap.mailmaster.model.CategoriaEmail
 import br.com.fiap.mailmaster.model.Email
-import java.util.Locale
 
 class FiltroEmail {
-    var id: Long? = null
+    var id: String? = null
     var categorias: List<CategoriaEmail>? = null
     var favorito: Boolean? = null
     var verDepois: Boolean? = null
@@ -14,7 +12,7 @@ class FiltroEmail {
 
     constructor() {}
 
-    constructor(id: Long?) {
+    constructor(id: String?) {
         this.id = id
     }
 
@@ -27,7 +25,8 @@ class FiltroEmail {
         this.verDepois = verDepois
     }
 
-    constructor(busca: String?) {
+    constructor(id: String?, busca: String?) {
+        this.id = id
         this.busca = busca
     }
 
@@ -43,10 +42,10 @@ class FiltroEmail {
 
         if(
             (this.id != null && this.id != email.id) ||
-            (this.favorito == true && !email.favorito) ||
-            (this.verDepois == true && !email.verDepois) ||
-            (!this.categorias.isNullOrEmpty() && !this.categorias!!.all { categoriaEmail -> email.categorias.contains(categoriaEmail) }) ||
-            (!this.busca.isNullOrEmpty() && !email.assunto.lowercase().contains(this.busca!!.lowercase()))
+            (this.favorito == true && !email.favorito!!) ||
+            (this.verDepois == true && !email.verDepois!!) ||
+            (!this.categorias.isNullOrEmpty() && !this.categorias!!.all { categoriaEmail -> !email.categorias.isNullOrEmpty() && email.categorias!!.contains(categoriaEmail) }) ||
+            (!this.busca.isNullOrEmpty() && !email.assunto.isNullOrEmpty() && !email.assunto!!.lowercase().contains(this.busca!!.lowercase()))
         ) {
             match = false
         }

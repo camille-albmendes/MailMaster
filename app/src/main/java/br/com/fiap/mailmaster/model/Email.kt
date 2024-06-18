@@ -3,20 +3,22 @@ package br.com.fiap.mailmaster.model
 import java.util.Date
 
 class Email {
-    var id: Long
-    var assunto: String
-    var conteudo: String
-    var remetente: RemetenteInterface
-    var categorias: List<CategoriaEmail>
-    var favorito: Boolean
-    var verDepois: Boolean
-    var data: Date
+    var id: String? = null
+    var assunto: String? = null
+    var conteudo: String? = null
+    var remetente: RemetenteGenerico? = null
+    var categorias: List<CategoriaEmail>? = null
+    var favorito: Boolean? = null
+    var verDepois: Boolean? = null
+    var data: Date? = null
+
+    constructor() {}
 
     constructor(
-        id: Long,
+        id: String?,
         assunto: String,
         conteudo: String,
-        remetente: RemetenteInterface,
+        remetente: RemetenteGenerico,
         categorias: List<CategoriaEmail>,
         favorito: Boolean,
         verDepois: Boolean,
@@ -33,10 +35,10 @@ class Email {
     }
 
     constructor(
-        id: Long,
+        id: String?,
         assunto: String,
         conteudo: String,
-        remetente: RemetenteInterface,
+        remetente: RemetenteGenerico
     ) {
         this.id = id
         this.assunto = assunto

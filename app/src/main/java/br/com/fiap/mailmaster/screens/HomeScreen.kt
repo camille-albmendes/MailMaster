@@ -1,30 +1,28 @@
 package br.com.fiap.mailmaster.screens
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -39,24 +37,45 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.fiap.mailmaster.LoginActivity
 import br.com.fiap.mailmaster.R
+import br.com.fiap.mailmaster.filter.FiltroEmail
+import br.com.fiap.mailmaster.model.Email
+import br.com.fiap.mailmaster.repository.buscarEmails
+import br.com.fiap.mailmaster.repository.filtrarEmails
+import br.com.fiap.mailmaster.security.FirebaseUtils
 
 @Composable
 fun HomeScreen() {
+    var emailsFetched by remember { mutableStateOf(false) }
+    var emails = remember { mutableStateListOf<Email>()}
+
+    if(!emailsFetched) {
+        buscarEmails()
+            .addOnSuccessListener {
+                emails.clear()
+                it.children.forEach() { email ->  emails.add(email.getValue(Email::class.java)!!) }
+                emailsFetched = true
+            }
+    }
+
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = Color.White)
@@ -64,13 +83,14 @@ fun HomeScreen() {
     ) {
         TopBar()
         SearchBar()
-        FilterBar()
-        MailList()
+        FilterBar(emails)
+        MailList(emails, emailsFetched)
     }
 }
 
 @Composable
 fun TopBar() {
+    val ctx = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -96,17 +116,15 @@ fun TopBar() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Settings",
+                    imageVector = Icons.Default.ExitToApp,
+                    contentDescription = "Logout",
                     tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "User",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable {
+                            FirebaseUtils.firebaseAuth.signOut()
+                            ctx.startActivity(Intent(ctx, LoginActivity::class.java))
+                        }
                 )
             }
         }
@@ -154,7 +172,7 @@ fun SearchBar() {
 }
 
 @Composable
-fun FilterBar() {
+fun FilterBar(emails: SnapshotStateList<Email>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -162,33 +180,51 @@ fun FilterBar() {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        FilterButton("All", Icons.Default.Email)
-        FilterButton("Markers", Icons.Default.Star)
-        FilterButton("Favorites", Icons.Default.Favorite)
-        FilterButton("Calendar", Icons.Default.DateRange)
+        FilterButton("Tudo", Icons.Default.Email, emails, FiltroEmail())
+        FilterButton("Ver depois", Icons.Default.Star, emails, FiltroEmail(false, true))
+        FilterButton("Favoritos", Icons.Default.Favorite, emails, FiltroEmail(true, false))
     }
 }
 
 @Composable
-fun FilterButton(text: String, icon: ImageVector) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+fun FilterButton(text: String, icon: ImageVector, emails: SnapshotStateList<Email>, filtroEmail: FiltroEmail) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.clickable {
+            buscarEmails()
+                .addOnSuccessListener {
+                    emails.clear()
+                    filtrarEmails(
+                        it.children.map() { email ->  email.getValue(Email::class.java)!! },
+                        filtroEmail
+                    )
+                        .forEach{ email ->  emails.add(email) }
+                }
+        }
+    ) {
         Icon(icon, contentDescription = text, modifier = Modifier.padding(end = 4.dp), tint = Color.Black)
         Text(text, fontWeight = FontWeight.Bold, color = Color.Black, fontSize = 12.sp)
     }
 }
 
 @Composable
-fun MailList() {
-    LazyColumn {
-        items(10) { index ->
-            MailItem(
-                sender = "Sender $index",
-                time = "20:30",
-                message = "Sample message $index",
-                isFavorite = index % 2 == 0,
-                isSaved = index % 3 == 0
-            )
+fun MailList(emails: SnapshotStateList<Email>, emailsFetched: Boolean) {
+    if(!emailsFetched) {
+        Text(text = "Carregando...")
+    } else if(emails.size > 0) {
+        LazyColumn {
+            items(emails.size) { index ->
+                MailItem(
+                    sender = emails[index].remetente!!.nome,
+                    time = emails[index].data.toString(),
+                    message = emails[index].assunto!!,
+                    isFavorite = emails[index].favorito == true,
+                    isSaved = emails[index].verDepois == true
+                )
+            }
         }
+    } else {
+        Text(text = "Não há e-mails por aqui...")
     }
 }
 

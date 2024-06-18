@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "932631378804",
+    "project_id": "fiap-b0eda",
+    "storage_bucket": "fiap-b0eda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932631378804:android:8eeb479d5e78d8c33c0a21",
+        "android_client_info": {
+          "package_name": "br.com.fiap.mailmaster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932631378804-c4568sl7ijsiam82luh9d51tluqr6k3p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.fiap.mailmaster",
+            "certificate_hash": "893d2a20ee63cfd2b1c366ffbe9ae2dd62a27194"
+          }
+        },
+        {
+          "client_id": "932631378804-3jea0kvtgrhai9u6jcpp66t6vj6g1bkb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvgWxo3tvR6t2Klxj-H9s3nkLs9U_q4EY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932631378804-3jea0kvtgrhai9u6jcpp66t6vj6g1bkb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
