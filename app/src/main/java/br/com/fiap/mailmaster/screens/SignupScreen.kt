@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -58,218 +60,216 @@ fun SignupScreen() {
 
     val ctx = LocalContext.current
 
-    Column(modifier = Modifier.background(color = colorResource(id = R.color.m_red))) {
+    Column(
+        modifier = Modifier
+            .background(color = colorResource(id = R.color.m_red))
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp)
+            .padding(top = 20.dp)
+            .fillMaxSize()
+    ) {
         Column(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .padding(top = 20.dp)
-                .fillMaxSize()
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .padding(top = 40.dp)
+                    .fillMaxSize()
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(top = 40.dp)
-                        .fillMaxSize()
-                ) {
-                    Row {
-                        Image(
-                            painter = painterResource(id = R.drawable.logomarca),
-                            contentDescription = "",
-                            modifier = Modifier.size(80.dp)
-                        )
+                Row {
+                    Image(
+                        painter = painterResource(id = R.drawable.logomarca),
+                        contentDescription = "",
+                        modifier = Modifier.size(80.dp)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.sign_up),
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(top = 30.dp)
+                    )
+                }
+
+                Column {
+                    OutlinedTextField(
+                        value = name,
+                        onValueChange = {
+                            // Filtrar apenas letras e espaços
+                            if (it.all { char -> char.isLetter() || char.isWhitespace() }) {
+                                name = it
+                            }
+                            errorName = validarNome(it)
+                        },
+                        supportingText = {
+                            if (errorName.isNotEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = errorName,
+                                    color = Color.White
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(top = 20.dp)
+                            .padding(horizontal = 40.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            containerColor = Color.White
+                        ),
+                        shape = RoundedCornerShape(10.dp),
+                        textStyle = TextStyle(color = Color.Black),
+                        label = { Text(text = stringResource(id = R.string.name), color = Color.Black) }
+                    )
+
+                    OutlinedTextField(
+                        value = dateofbirth,
+                        onValueChange = {
+                            dateofbirth = formatarData(it)
+                            errorDateOfBirth = validarData(dateofbirth)
+                        },
+                        supportingText = {
+                            if (errorDateOfBirth.isNotEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = errorDateOfBirth,
+                                    color = Color.White
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(top = 15.dp)
+                            .padding(horizontal = 40.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(10.dp),
+                        textStyle = TextStyle(color = Color.Black),
+                        label = { Text(text = stringResource(id = R.string.date_of_birth), color = Color.Black) }
+                    )
+
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = {
+                            email = it
+                            errorEmail = validarEmail(it)
+                        },
+                        supportingText = {
+                            if (errorEmail.isNotEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = errorEmail,
+                                    color = Color.White
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(top = 15.dp)
+                            .padding(horizontal = 40.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(10.dp),
+                        textStyle = TextStyle(color = Color.Black),
+                        label = { Text(text = stringResource(id = R.string.email), color = Color.Black) }
+                    )
+
+                    OutlinedTextField(
+                        value = cemail,
+                        onValueChange = {
+                            cemail = it
+                            errorConfirmEmail = validarConfirmacaoEmail(email, it)
+                        },
+                        supportingText = {
+                            if (errorConfirmEmail.isNotEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = errorConfirmEmail,
+                                    color = Color.White
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(top = 15.dp)
+                            .padding(horizontal = 40.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(10.dp),
+                        textStyle = TextStyle(color = Color.Black),
+                        label = { Text(text = stringResource(id = R.string.cemail), color = Color.Black) }
+                    )
+
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = {
+                            password = it
+                            errorPassword = validarSenha(it)
+                        },
+                        supportingText = {
+                            if (errorPassword.isNotEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = errorPassword,
+                                    color = Color.White
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(top = 15.dp)
+                            .padding(horizontal = 40.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(10.dp),
+                        textStyle = TextStyle(color = Color.Black),
+                        label = { Text(text = stringResource(id = R.string.password), color = Color.Black) }
+                    )
+
+                    OutlinedTextField(
+                        value = cpassword,
+                        onValueChange = {
+                            cpassword = it
+                            errorConfirmPassword = validarConfirmacaoSenha(password, it)
+                        },
+                        supportingText = {
+                            if (errorConfirmPassword.isNotEmpty()) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = errorConfirmPassword,
+                                    color = Color.White
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(top = 15.dp)
+                            .padding(horizontal = 40.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(10.dp),
+                        textStyle = TextStyle(color = Color.Black),
+                        label = { Text(text = stringResource(id = R.string.cpassword), color = Color.Black) }
+                    )
+                }
+
+                Row(modifier = Modifier.padding(top = 20.dp)) {
+                    Button(
+                        onClick = {
+                            val errors = validarFormulario(
+                                name, dateofbirth, email, cemail, password, cpassword
+                            )
+                            if (errors.isEmpty()) {
+                                cadastrarUsuario(ctx, name, email, password)
+                            } else {
+                                // Atualizar estados de erro de acordo
+                                errorName = errors["Nome"] ?: ""
+                                errorDateOfBirth = errors["Data de Nascimento"] ?: ""
+                                errorEmail = errors["Email"] ?: ""
+                                errorConfirmEmail = errors["Confirmação de Email"] ?: ""
+                                errorPassword = errors["Senha"] ?: ""
+                                errorConfirmPassword = errors["Confirmação de Senha"] ?: ""
+                            }
+                        },
+                        modifier = Modifier.padding(start = 10.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(colorResource(id = R.color.black))
+                    ) {
                         Text(
                             text = stringResource(id = R.string.sign_up),
-                            fontSize = 18.sp,
-                            modifier = Modifier.padding(top = 30.dp)
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            color = Color.White
                         )
-                    }
-
-                    Column {
-                        OutlinedTextField(
-                            value = name,
-                            onValueChange = {
-                                // Filtrar apenas letras e espaços
-                                if (it.all { char -> char.isLetter() || char.isWhitespace() }) {
-                                    name = it
-                                }
-                                errorName = validarNome(it)
-                            },
-                            supportingText = {
-                                if (errorName.isNotEmpty()) {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = errorName,
-                                        color = Color.White
-                                    )
-                                }
-                            },
-                            modifier = Modifier
-                                .padding(top = 20.dp)
-                                .padding(horizontal = 40.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                containerColor = Color.White
-                            ),
-                            shape = RoundedCornerShape(10.dp),
-                            textStyle = TextStyle(color = Color.Black),
-                            label = { Text(text = stringResource(id = R.string.name), color = Color.Black) }
-                        )
-
-
-                        OutlinedTextField(
-                            value = dateofbirth,
-                            onValueChange = {
-                                dateofbirth = formatarData(it)
-                                errorDateOfBirth = validarData(dateofbirth)
-                            },
-                            supportingText = {
-                                if (errorDateOfBirth.isNotEmpty()) {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = errorDateOfBirth,
-                                        color = Color.White
-                                    )
-                                }
-                            },
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .padding(horizontal = 40.dp),
-
-                            colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
-                            shape = RoundedCornerShape(10.dp),
-                            textStyle = TextStyle(color = Color.Black),
-                            label = { Text(text = stringResource(id = R.string.date_of_birth), color = Color.Black) }
-                        )
-
-                        OutlinedTextField(
-                            value = email,
-                            onValueChange = {
-                                email = it
-                                errorEmail = validarEmail(it)
-                            },
-                            supportingText = {
-                                if (errorEmail.isNotEmpty()) {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = errorEmail,
-                                        color = Color.White
-                                    )
-                                }
-                            },
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .padding(horizontal = 40.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
-                            shape = RoundedCornerShape(10.dp),
-                            textStyle = TextStyle(color = Color.Black),
-                            label = { Text(text = stringResource(id = R.string.email), color = Color.Black) }
-                        )
-
-                        OutlinedTextField(
-                            value = cemail,
-                            onValueChange = {
-                                cemail = it
-                                errorConfirmEmail = validarConfirmacaoEmail(email, it)
-                            },
-                            supportingText = {
-                                if (errorConfirmEmail.isNotEmpty()) {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = errorConfirmEmail,
-                                        color = Color.White
-                                    )
-                                }
-                            },
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .padding(horizontal = 40.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
-                            shape = RoundedCornerShape(10.dp),
-                            textStyle = TextStyle(color = Color.Black),
-                            label = { Text(text = stringResource(id = R.string.cemail), color = Color.Black) }
-                        )
-
-                        OutlinedTextField(
-                            value = password,
-                            onValueChange = {
-                                password = it
-                                errorPassword = validarSenha(it)
-                            },
-                            supportingText = {
-                                if (errorPassword.isNotEmpty()) {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = errorPassword,
-                                        color = Color.White
-                                    )
-                                }
-                            },
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .padding(horizontal = 40.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
-                            shape = RoundedCornerShape(10.dp),
-                            textStyle = TextStyle(color = Color.Black),
-                            label = { Text(text = stringResource(id = R.string.password), color = Color.Black) }
-                        )
-
-                        OutlinedTextField(
-                            value = cpassword,
-                            onValueChange = {
-                                cpassword = it
-                                errorConfirmPassword = validarConfirmacaoSenha(password, it)
-                            },
-                            supportingText = {
-                                if (errorConfirmPassword.isNotEmpty()) {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = errorConfirmPassword,
-                                        color = Color.White
-                                    )
-                                }
-                            },
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .padding(horizontal = 40.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(containerColor = Color.White),
-                            shape = RoundedCornerShape(10.dp),
-                            textStyle = TextStyle(color = Color.Black),
-                            label = { Text(text = stringResource(id = R.string.cpassword), color = Color.Black) }
-                        )
-                    }
-
-                    Row(modifier = Modifier.padding(top = 20.dp)) {
-                        Button(
-                            onClick = {
-                                val errors = validarFormulario(
-                                    name, dateofbirth, email, cemail, password, cpassword
-                                )
-                                if (errors.isEmpty()) {
-                                    cadastrarUsuario(ctx, name, email, password)
-                                } else {
-                                    // Atualizar estados de erro de acordo
-                                    errorName = errors["Nome"] ?: ""
-                                    errorDateOfBirth = errors["Data de Nascimento"] ?: ""
-                                    errorEmail = errors["Email"] ?: ""
-                                    errorConfirmEmail = errors["Confirmação de Email"] ?: ""
-                                    errorPassword = errors["Senha"] ?: ""
-                                    errorConfirmPassword = errors["Confirmação de Senha"] ?: ""
-                                }
-                            },
-                            modifier = Modifier.padding(start = 10.dp),
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.buttonColors(colorResource(id = R.color.black))
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.sign_up),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = Color.White
-                            )
-                        }
                     }
                 }
             }
