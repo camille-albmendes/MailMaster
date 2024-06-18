@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -149,13 +151,13 @@ fun SearchBar() {
             placeholder = { Text("Search") },
             trailingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White, // Cor de fundo branca
+                containerColor = Color.White,
                 focusedIndicatorColor = Color.Gray,
                 unfocusedIndicatorColor = Color.Gray
             ),
             modifier = Modifier
                 .weight(1f)
-                .height(40.dp) // Altura da barra de busca
+                .height(40.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
         )
@@ -164,8 +166,8 @@ fun SearchBar() {
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B0000)),
             modifier = Modifier
                 .padding(start = 8.dp)
-                .height(40.dp) // Altura do botão
-                .defaultMinSize(minWidth = 120.dp) // Largura mínima do botão
+                .height(40.dp)
+                .defaultMinSize(minWidth = 120.dp)
         ) {
             Text("New Mail", color = Color.White)
         }
@@ -244,79 +246,98 @@ fun MailItem(email: Email) {
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = sender,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)
                 )
-                Text(
-                    text = message,
-                    fontSize = 14.sp,
-                    color = Color.DarkGray,
-                    modifier = Modifier.weight(2f) // Tamanho ajustável para a mensagem
-                )
-                IconButton(
-                    onClick = {
-                        favorite = !favorite
-                        email.favorito = favorite
-                        atualizarEmail(usuarioId, email)
-                    },
-                    colors = IconButtonDefaults.iconButtonColors(contentColor = if (isFavorite) Color(0xFF8B0000) else Color.Gray) // Cor do ícone
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(2f)
                 ) {
-                    Icon(
-                        imageVector = if (favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "Favorite"
-                    )
+                    Column {
+                        //   Text(
+                        //   text = title,
+                        //    fontWeight = FontWeight.Bold,
+                        //   modifier = Modifier.padding(bottom = 4.dp)
+                        //   )
+                        Text(
+                            text = message,
+                            fontSize = 14.sp,
+                            color = Color.DarkGray
+                        )
+                    }
                 }
-                IconButton(
-                    onClick = {
-                        saved = !saved
-                        email.verDepois = saved;
-                        atualizarEmail(usuarioId, email)
-                    },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = if (saved) Color(0xFF8B0000) else Color.Gray // Cor do ícone
-                    )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End,
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(0.5f)
                 ) {
-                    Icon(
-                        painter = painterResource(id = if(saved) R.drawable.iconhiglighter else R.drawable.iconhiglighterfill),
-                        contentDescription = "Marked",
-                        modifier = Modifier.size(24.dp) // Adjust the size as needed
-                    )
+                    IconButton(
+                        onClick = {
+                            favorite = !favorite
+                            email.favorito = favorite
+                            atualizarEmail(usuarioId, email)
+                        },
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = if (favorite) Color(0xFF8B0000) else Color.Gray)
+                    ) {
+                        Icon(
+                            imageVector = if (favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = "Favorite"
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            saved = !saved
+                            email.verDepois = saved;
+                            atualizarEmail(usuarioId, email)
+                        },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = if (saved) Color(0xFF8B0000) else Color.Gray
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(id = if (saved) R.drawable.iconhiglighterfill else R.drawable.iconhiglighter),
+                            contentDescription = "Save",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
 
-
-        }
-
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp)
-        ) {
-            Text(
-                text = time,
-                fontSize = 12.sp,
-                color = Color.Gray,
+            Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(end = 16.dp)
-                    .align(Alignment.End)
-            )}
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(
+                    text = time,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+            }
+        }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
