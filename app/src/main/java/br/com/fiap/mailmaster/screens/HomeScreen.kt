@@ -60,6 +60,7 @@ import br.com.fiap.mailmaster.LoginActivity
 import br.com.fiap.mailmaster.R
 import br.com.fiap.mailmaster.filter.FiltroEmail
 import br.com.fiap.mailmaster.model.Email
+import br.com.fiap.mailmaster.repository.atualizarEmail
 import br.com.fiap.mailmaster.repository.buscarEmails
 import br.com.fiap.mailmaster.repository.filtrarEmails
 import br.com.fiap.mailmaster.security.FirebaseUtils
@@ -84,7 +85,7 @@ fun HomeScreen() {
         .padding(15.dp)
     ) {
         TopBar()
-        SearchBar()
+//        SearchBar()
         FilterBar(emails)
         MailList(emails, emailsFetched)
     }
@@ -216,13 +217,7 @@ fun MailList(emails: SnapshotStateList<Email>, emailsFetched: Boolean) {
     } else if(emails.size > 0) {
         LazyColumn {
             items(emails.size) { index ->
-                MailItem(
-                    sender = emails[index].remetente!!.nome,
-                    time = emails[index].data.toString(),
-                    message = emails[index].assunto!!,
-                    isFavorite = emails[index].favorito == true,
-                    isSaved = emails[index].verDepois == true
-                )
+                MailItem(emails[index])
             }
         }
     } else {
@@ -231,15 +226,17 @@ fun MailList(emails: SnapshotStateList<Email>, emailsFetched: Boolean) {
 }
 
 @Composable
-fun MailItem(
-    sender: String,
-    time: String,
-    message: String,
-    isFavorite: Boolean,
-    isSaved: Boolean
-) {
+fun MailItem(email: Email) {
+    val sender = email.remetente!!.nome
+    val time = email.data.toString()
+    val message = email.assunto!!
+    val isFavorite = email.favorito == true
+    val isSaved = email.verDepois == true
+
     var favorite by remember { mutableStateOf(isFavorite) }
     var saved by remember { mutableStateOf(isSaved) }
+
+    val usuarioId = FirebaseUtils.firebaseAuth.currentUser!!.uid
 
     Card(
         modifier = Modifier
@@ -295,7 +292,11 @@ fun MailItem(
                         .weight(0.5f)
                 ) {
                     IconButton(
-                        onClick = { favorite = !favorite },
+                        onClick = {
+                            favorite = !favorite
+                            email.favorito = favorite
+                            atualizarEmail(usuarioId, email)
+                        },
                         colors = IconButtonDefaults.iconButtonColors(contentColor = if (favorite) Color(0xFF8B0000) else Color.Gray)
                     ) {
                         Icon(
@@ -304,7 +305,11 @@ fun MailItem(
                         )
                     }
                     IconButton(
-                        onClick = { saved = !saved },
+                        onClick = {
+                            saved = !saved
+                            email.verDepois = saved;
+                            atualizarEmail(usuarioId, email)
+                        },
                         colors = IconButtonDefaults.iconButtonColors(
                             contentColor = if (saved) Color(0xFF8B0000) else Color.Gray
                         )
