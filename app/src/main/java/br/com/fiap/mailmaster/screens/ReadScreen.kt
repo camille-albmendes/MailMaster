@@ -1,6 +1,8 @@
 package br.com.fiap.mailmaster.screens
 
+import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,32 +21,44 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.fiap.mailmaster.MainActivity
 import br.com.fiap.mailmaster.R
+import br.com.fiap.mailmaster.model.Email
 
 @Composable
-fun ReadScreen() {
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color.White)
-        .padding(15.dp)
+fun ReadScreen(email: Email?) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+            .padding(15.dp)
     ) {
-       TopBar()
+
         Return()
-        MessageField()
+        if(email != null) {
+            MessageField(email)
+        } else {
+            Text(text = "Ocorreu um erro ao exibir o email")
+        }
     }
 }
 
 
 @Composable
 fun Return() {
+    val ctx = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 20.dp, top = 10.dp)
+            .clickable {
+                ctx.startActivity(Intent(ctx, MainActivity::class.java))
+            }
     ) {
         Icon(
             imageVector = Icons.Filled.KeyboardArrowLeft,
@@ -57,8 +71,7 @@ fun Return() {
 }
 
 @Composable
-fun MessageField() {
-
+fun MessageField(email: Email) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -66,19 +79,17 @@ fun MessageField() {
             .shadow(8.dp, RoundedCornerShape(8.dp)),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-
             Text(
-                text = "20:30",
+                text = email.data.toString(),
                 fontSize = 11.sp,
                 color = Color.Gray
             )
 
             Text(
-                text = "Nubank",
+                text = "Remetente: ${email.remetente!!.email}",
                 fontSize = 18.sp,
                 color = Color.Black
             )
@@ -86,21 +97,20 @@ fun MessageField() {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Entenda suas Finanças",
+                text = "Assunto: ${email.assunto!!}",
                 fontSize = 16.sp,
                 color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sapien lorem, pretium quis ipsum sit amet, aliquet placerat dui. Fusce sagittis venenatis urna, eget lacinia dolor accumsan nec. Sed molestie mi velit, eget elementum est accumsan at. Cras dictum ante sed sapien imperdiet convallis. Nunc nulla risus, interdum in tempus vel, sodales ut nibh. In sit amet purus eget ipsum malesuada viverra vitae in felis. Sed hendrerit sollicitudin libero, quis auctor diam condimentum eget. In hac habitasse platea dictumst. Sed vel posuere mi, id cursus libero. Mauris nec leo nec lorem mattis maximus. Fusce ligula erat, bibendum non euismod id, volutpat at libero. Nulla viverra sollicitudin nunc, eu ultricies nisi aliquet id. Nam porttitor ullamcorper risus a tempor. Cras a purus vel mauris ultricies gravida eu eu dui. Suspendisse non finibus dolor, ac consequat nibh. Morbi convallis, nunc luctus aliquam finibus, mauris nunc volutpat magna, sit amet ultrices quam mauris eu libero.",
+                text = email.conteudo!!,
                 fontSize = 15.sp,
                 color = Color.Black
             )
         }
     }
-
-
 }
+
 

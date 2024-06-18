@@ -28,7 +28,6 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(navController = navController, startDestination = "home" ){
                         composable(route = "home") { HomeScreen() }
-                        composable(route = "read") { ReadScreen() }
                     }
                 }
             }
