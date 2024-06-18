@@ -68,6 +68,18 @@ fun criarEmailsMock(usuarioId: String) {
     }
 }
 
+fun atualizarEmail(usuarioId: String, email: Email) {
+    val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+    val ref = firebaseDatabase.getReference()
+
+    ref
+        .child("usuarios")
+        .child(usuarioId)
+        .child("emails")
+        .child(email.id!!)
+        .setValue(email)
+}
+
 fun buscarEmails(): Task<DataSnapshot> {
     val firebaseAuth = FirebaseAuth.getInstance()
     val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
