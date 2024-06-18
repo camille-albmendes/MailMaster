@@ -56,8 +56,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import br.com.fiap.mailmaster.LoginActivity
+import br.com.fiap.mailmaster.MainActivity
 import br.com.fiap.mailmaster.R
+import br.com.fiap.mailmaster.ReadActivity
 import br.com.fiap.mailmaster.filter.FiltroEmail
 import br.com.fiap.mailmaster.model.Email
 import br.com.fiap.mailmaster.repository.atualizarEmail
@@ -237,12 +240,17 @@ fun MailItem(email: Email) {
     var saved by remember { mutableStateOf(isSaved) }
 
     val usuarioId = FirebaseUtils.firebaseAuth.currentUser!!.uid
+    val ctx = LocalContext.current
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 5.dp)
-            .shadow(8.dp, RoundedCornerShape(8.dp)),
+            .shadow(8.dp, RoundedCornerShape(8.dp))
+            .clickable {
+                ReadActivity.email = email
+                ctx.startActivity(Intent(ctx, ReadActivity::class.java))
+            },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {

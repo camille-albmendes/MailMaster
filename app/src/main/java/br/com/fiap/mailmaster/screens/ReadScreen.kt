@@ -1,6 +1,8 @@
 package br.com.fiap.mailmaster.screens
 
+import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,13 +21,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.fiap.mailmaster.MainActivity
 import br.com.fiap.mailmaster.R
+import br.com.fiap.mailmaster.model.Email
 
 @Composable
-fun ReadScreen(emailId: String) {
+fun ReadScreen(email: Email?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,17 +39,26 @@ fun ReadScreen(emailId: String) {
     ) {
 
         Return()
-        MessageField(emailId)
+        if(email != null) {
+            MessageField(email)
+        } else {
+            Text(text = "Ocorreu um erro ao exibir o email")
+        }
     }
 }
 
 
 @Composable
 fun Return() {
+    val ctx = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 20.dp, top = 10.dp)
+            .clickable {
+                ctx.startActivity(Intent(ctx, MainActivity::class.java))
+            }
     ) {
         Icon(
             imageVector = Icons.Filled.KeyboardArrowLeft,
@@ -57,7 +71,7 @@ fun Return() {
 }
 
 @Composable
-fun MessageField(emailId: String) {
+fun MessageField(email: Email) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -69,13 +83,13 @@ fun MessageField(emailId: String) {
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "20:30", // Exemplo de hora do email
+                text = email.data.toString(),
                 fontSize = 11.sp,
                 color = Color.Gray
             )
 
             Text(
-                text = "Remetente: $emailId", // Utiliza o emailId para exibir o remetente
+                text = "Remetente: ${email.remetente!!.email}",
                 fontSize = 18.sp,
                 color = Color.Black
             )
@@ -83,15 +97,15 @@ fun MessageField(emailId: String) {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Assunto do Email", // Aqui você pode adicionar o assunto real do email
+                text = "Assunto: ${email.assunto!!}",
                 fontSize = 16.sp,
                 color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Conteúdo do Email", // Aqui você pode adicionar o conteúdo real do email
+                text = email.conteudo!!,
                 fontSize = 15.sp,
                 color = Color.Black
             )

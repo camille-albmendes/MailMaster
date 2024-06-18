@@ -377,7 +377,8 @@ fun validarFormulario(
 }
 
 fun cadastrarUsuario(ctx: Context, nome: String, email: String, senha: String) {
-    // Implementar o cadastro de usuário, como salvar no banco de dados ou enviar a um servidor
-    val intent = Intent(ctx, MainActivity::class.java)
-    ctx.startActivity(intent)
+    br.com.fiap.mailmaster.repository.cadastrarUsuario(nome, email, senha)
+        .addOnCompleteListener {
+            ctx.startActivity(Intent(ctx, MainActivity::class.java))
+        }
 }
