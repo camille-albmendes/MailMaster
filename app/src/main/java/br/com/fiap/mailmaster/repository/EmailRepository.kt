@@ -24,7 +24,6 @@ val todosOsEmails = listOf(
     emailTres
 )
 
-// Função para criar e-mail de boas-vindas
 fun criarEmailBoasVindas(usuarioId: String) {
     val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     val ref = firebaseDatabase.getReference()
@@ -49,7 +48,6 @@ fun criarEmailBoasVindas(usuarioId: String) {
         .setValue(emailBoasVindas)
 }
 
-// Função para criar e-mails mock
 fun criarEmailsMock(usuarioId: String) {
     val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     val ref = firebaseDatabase.getReference()
@@ -71,7 +69,6 @@ fun criarEmailsMock(usuarioId: String) {
     }
 }
 
-// Função para atualizar e-mail
 fun atualizarEmail(usuarioId: String, email: Email) {
     val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     val ref = firebaseDatabase.getReference()
@@ -84,7 +81,6 @@ fun atualizarEmail(usuarioId: String, email: Email) {
         .setValue(email)
 }
 
-// Função para buscar e-mails e processar para identificar spam
 fun buscarEmails(): Task<DataSnapshot> {
     val firebaseAuth = FirebaseAuth.getInstance()
     val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
@@ -97,8 +93,6 @@ fun buscarEmails(): Task<DataSnapshot> {
         .get()
         .addOnSuccessListener { snapshot ->
             val emails = snapshot.children.mapNotNull { it.getValue(Email::class.java) }
-
-            // Marcar e-mails como spam
             emails.forEach { email ->
                 email.spam = isSpam(email)
                 atualizarEmail(firebaseAuth.currentUser!!.uid, email)
@@ -106,9 +100,31 @@ fun buscarEmails(): Task<DataSnapshot> {
         }
 }
 
-// Função para filtrar e-mails com base no filtro
 fun filtrarEmails(emails: Collection<Email>, filtroEmail: FiltroEmail): List<Email> {
     return emails.filter { email ->
         filtroEmail.matchEmail(email) && (filtroEmail.spam == null || email.spam == filtroEmail.spam)
     }
+}
+
+fun verificarEnviosRecentesEmail(usuarioId: String, maxEnvios: Int): Task<Boolean> {
+    val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+    val ref = firebaseDatabase.getReference()
+
+    val dataLimite = System.currentTimeMillis() - 24 * 60 * 60 * 1000 // Últimas 24 horas
+    return ref
+        .child("usuarios")
+        .child(usuarioId)
+        .child("envios")
+        .orderByChild("timestamp")
+        .startAt(dataLimite.toDouble())
+        .get()
+        .continueWith { task ->
+            if (task.isSuccessful) {
+                val snapshot = task.result
+                val enviosRecentes = snapshot?.children?.count() ?: 0
+                enviosRecentes < maxEnvios
+            } else {
+                throw task.exception ?: Exception("Erro ao verificar envios recentes")
+            }
+        }
 }

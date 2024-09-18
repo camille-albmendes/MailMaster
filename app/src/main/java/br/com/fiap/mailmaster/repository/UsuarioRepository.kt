@@ -26,7 +26,30 @@ fun cadastrarUsuario(nome: String, email: String, senha: String): Task<AuthResul
                         }
                     }
             } else {
-                println("failed to Authenticate !")
+                println("Falha ao autenticar!")
+            }
+        }
+}
+
+fun verificarEnviosRecentesUsuario(usuarioId: String, maxEnvios: Int): Task<Boolean> {
+    val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+    val ref = firebaseDatabase.getReference()
+
+    val dataLimite = System.currentTimeMillis() - 24 * 60 * 60 * 1000 // Últimas 24 horas
+    return ref
+        .child("usuarios")
+        .child(usuarioId)
+        .child("envios")
+        .orderByChild("timestamp")
+        .startAt(dataLimite.toDouble())
+        .get()
+        .continueWith { task ->
+            if (task.isSuccessful) {
+                val snapshot = task.result
+                val enviosRecentes = snapshot?.children?.count() ?: 0
+                enviosRecentes < maxEnvios
+            } else {
+                throw task.exception ?: Exception("Erro ao verificar envios recentes")
             }
         }
 }
