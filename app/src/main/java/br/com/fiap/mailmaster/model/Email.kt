@@ -11,6 +11,7 @@ class Email {
     var favorito: Boolean? = null
     var verDepois: Boolean? = null
     var data: Date? = null
+    var spam: Boolean? = null
 
     constructor() {}
 
@@ -22,7 +23,8 @@ class Email {
         categorias: List<CategoriaEmail>,
         favorito: Boolean,
         verDepois: Boolean,
-        data: Date
+        data: Date,
+        spam: Boolean
     ) {
         this.id = id
         this.assunto = assunto
@@ -32,6 +34,7 @@ class Email {
         this.favorito = favorito
         this.verDepois = verDepois
         this.data = data
+        this.spam = spam
     }
 
     constructor(
@@ -48,5 +51,6 @@ class Email {
         this.favorito = false
         this.verDepois = false
         this.data = Date()
+        this.spam = false
     }
 }
