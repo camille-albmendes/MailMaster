@@ -45,7 +45,7 @@ class FiltroEmail {
             (this.favorito == true && !email.favorito!!) ||
             (this.verDepois == true && !email.verDepois!!) ||
             (!this.categorias.isNullOrEmpty() && !this.categorias!!.all { categoriaEmail -> !email.categorias.isNullOrEmpty() && email.categorias!!.contains(categoriaEmail) }) ||
-            (!this.busca.isNullOrEmpty() && !email.assunto.isNullOrEmpty() && !email.assunto!!.lowercase().contains(this.busca!!.lowercase()))
+            (!this.busca.isNullOrEmpty() && !email.subject.isNullOrEmpty() && !email.subject!!.lowercase().contains(this.busca!!.lowercase()))
         ) {
             match = false
         }

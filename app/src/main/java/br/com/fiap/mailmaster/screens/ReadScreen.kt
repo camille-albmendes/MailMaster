@@ -97,7 +97,7 @@ fun MessageField(email: Email) {
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Assunto: ${email.assunto!!}",
+                text = "Assunto: ${email.subject!!}",
                 fontSize = 16.sp,
                 color = Color.Black
             )
@@ -105,7 +105,7 @@ fun MessageField(email: Email) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = email.conteudo!!,
+                text = email.body!!,
                 fontSize = 15.sp,
                 color = Color.Black
             )

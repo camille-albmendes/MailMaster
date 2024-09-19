@@ -230,9 +230,9 @@ fun MailList(emails: SnapshotStateList<Email>, emailsFetched: Boolean) {
 
 @Composable
 fun MailItem(email: Email) {
-    val sender = email.remetente!!.nome
-    val time = email.data.toString()
-    val message = email.assunto!!
+    val sender = email.remetente?.nome ?: "Remetente desconhecido"
+    val time = email.data?.toString() ?: "Data desconhecida"
+    val message = email.subject ?: "Sem assunto"
     val isFavorite = email.favorito == true
     val isSaved = email.verDepois == true
 
@@ -270,17 +270,11 @@ fun MailItem(email: Email) {
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.weight(2f)
                 ) {
                     Column {
-                        //   Text(
-                        //   text = title,
-                        //    fontWeight = FontWeight.Bold,
-                        //   modifier = Modifier.padding(bottom = 4.dp)
-                        //   )
                         Text(
                             text = message,
                             fontSize = 14.sp,
@@ -290,7 +284,6 @@ fun MailItem(email: Email) {
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
-
 
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -305,7 +298,9 @@ fun MailItem(email: Email) {
                             email.favorito = favorite
                             atualizarEmail(usuarioId, email)
                         },
-                        colors = IconButtonDefaults.iconButtonColors(contentColor = if (favorite) Color(0xFF8B0000) else Color.Gray)
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = if (favorite) Color(0xFF8B0000) else Color.Gray
+                        )
                     ) {
                         Icon(
                             imageVector = if (favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
@@ -315,7 +310,7 @@ fun MailItem(email: Email) {
                     IconButton(
                         onClick = {
                             saved = !saved
-                            email.verDepois = saved;
+                            email.verDepois = saved
                             atualizarEmail(usuarioId, email)
                         },
                         colors = IconButtonDefaults.iconButtonColors(
@@ -346,6 +341,7 @@ fun MailItem(email: Email) {
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
